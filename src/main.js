@@ -1,4 +1,14 @@
-import './style.css';
+// Removed direct CSS import to allow universal raw browser hosting without MIME type errors
+
+// Safe base URL resolution for both Vite builds and raw GitHub Pages hosting
+const getBaseUrl = () => {
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
+      return import.meta.env.BASE_URL;
+    }
+  } catch (e) {}
+  return './';
+};
 
 // ----------------------------------------------------
 // 1. Mobile Menu Toggle
@@ -822,7 +832,7 @@ if (detailsMainContent && detailsErrorContent) {
     
     if (heroImg) {
       const imgPath = details.image.startsWith('/') ? details.image.substring(1) : details.image;
-      heroImg.src = import.meta.env.BASE_URL + imgPath;
+      heroImg.src = getBaseUrl() + imgPath;
       heroImg.alt = details.title;
     }
     

@@ -821,7 +821,8 @@ if (detailsMainContent && detailsErrorContent) {
     if (overviewEl) overviewEl.innerText = details.overview;
     
     if (heroImg) {
-      heroImg.src = details.image;
+      const imgPath = details.image.startsWith('/') ? details.image.substring(1) : details.image;
+      heroImg.src = import.meta.env.BASE_URL + imgPath;
       heroImg.alt = details.title;
     }
     

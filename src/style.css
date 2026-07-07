@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-900: #091E3A;
+  --color-navy-800: #0d284f;
+  --color-navy-700: #123466;
+  --color-navy-650: #173f7a;
+  --color-navy-600: #1b498d;
+  --color-navy-500: #2563eb;
+  
+  --color-emerald-500: #00A88F;
+  --color-emerald-600: #008f79;
+  --color-emerald-700: #007563;
+  --color-emerald-100: #e0f6f3;
+  --color-emerald-50: #f0faf8;
+
+  --color-gold-500: #FFB236;
+  --color-gold-600: #e59d28;
+  --color-gold-100: #fef3c7;
+
+  --color-canvas-bg: #F6F9FC;
+  
+  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* Custom Base & Utilities */
+@layer base {
+  body {
+    background-color: var(--color-canvas-bg);
+    color: #334155; /* Slate-700 */
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Animations and Micro-interactions */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.03); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Glassmorphic custom properties */
+.glass-nav {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-card-dark {
+  background: rgba(9, 30, 58, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Site-wide Preloader Styles */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #091E3A 0%, #06152a 100%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preloader-progress-bar {
+  width: 180px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 24px;
+}
+
+.preloader-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981, #00A88F);
+  border-radius: 99px;
+  animation: preloader-fill 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes preloader-fill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+

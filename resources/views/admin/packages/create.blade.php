@@ -32,6 +32,7 @@
                     
                     <div class="grid grid-cols-1 gap-6">
                         @include('admin.packages._field', ['label'=>'Title','name'=>'title','type'=>'text','placeholder'=>'Dubai Premium Experience'])
+                        @include('admin.packages._field', ['label'=>'Custom URL Slug (Optional)','name'=>'slug','type'=>'text','placeholder'=>'dubai-premium-experience'])
                         @include('admin.packages._field', ['label'=>'Subtitle','name'=>'subtitle','type'=>'text','placeholder'=>'A short compelling description'])
                     </div>
 

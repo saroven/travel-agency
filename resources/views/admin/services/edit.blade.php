@@ -36,6 +36,11 @@
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
                         </div>
                         <div>
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Custom URL Slug</label>
+                            <input type="text" name="slug" value="{{ old('slug', $service->slug) }}" required
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        </div>
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Tagline Subtitle</label>
                             <input type="text" name="subtitle" value="{{ old('subtitle', $service->subtitle) }}" required
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />

@@ -27,6 +27,7 @@ class PackageController extends Controller
     {
         $validated = $request->validate([
             'title'         => 'required|string|max:200',
+            'slug'          => 'nullable|string|max:200|alpha_dash|unique:tour_packages,slug',
             'subtitle'      => 'required|string|max:300',
             'category'      => 'required|string|max:100',
             'duration'      => 'required|string|max:50',
@@ -50,7 +51,8 @@ class PackageController extends Controller
             $imagePath = $request->file('image')->store('packages', 'public');
         }
 
-        $slug = Str::slug($validated['title']);
+        $slugInput = $request->input('slug') ? Str::slug($request->input('slug')) : Str::slug($validated['title']);
+        $slug = $slugInput;
         $originalSlug = $slug;
         $count = 1;
         while (TourPackage::where('slug', $slug)->exists()) {
@@ -112,6 +114,7 @@ class PackageController extends Controller
     {
         $validated = $request->validate([
             'title'         => 'required|string|max:200',
+            'slug'          => 'nullable|string|max:200|alpha_dash|unique:tour_packages,slug,' . $package->id,
             'subtitle'      => 'required|string|max:300',
             'category'      => 'required|string|max:100',
             'duration'      => 'required|string|max:50',
@@ -135,7 +138,8 @@ class PackageController extends Controller
             $imagePath = $request->file('image')->store('packages', 'public');
         }
 
-        $slug = Str::slug($validated['title']);
+        $slugInput = $request->input('slug') ? Str::slug($request->input('slug')) : Str::slug($validated['title']);
+        $slug = $slugInput;
         $originalSlug = $slug;
         $count = 1;
         while (TourPackage::where('slug', $slug)->where('id', '!=', $package->id)->exists()) {

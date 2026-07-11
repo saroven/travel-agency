@@ -24,12 +24,14 @@ class ServiceController extends Controller
     {
         $request->validate([
             'title'    => 'required|string|max:200',
+            'slug'     => 'nullable|string|max:200|alpha_dash|unique:services,slug',
             'subtitle' => 'required|string|max:300',
             'icon'     => 'required|string|max:10',
             'overview' => 'required|string',
         ]);
 
-        $slug = Str::slug($request->title);
+        $slugInput = $request->input('slug') ? Str::slug($request->input('slug')) : Str::slug($request->title);
+        $slug = $slugInput;
         // Ensure uniqueness of slug
         $count = Service::where('slug', 'like', "{$slug}%")->count();
         if ($count > 0) {
@@ -61,12 +63,21 @@ class ServiceController extends Controller
     {
         $request->validate([
             'title'    => 'required|string|max:200',
+            'slug'     => 'nullable|string|max:200|alpha_dash|unique:services,slug,' . $service->id,
             'subtitle' => 'required|string|max:300',
             'icon'     => 'required|string|max:10',
             'overview' => 'required|string',
         ]);
 
+        $slugInput = $request->input('slug') ? Str::slug($request->input('slug')) : Str::slug($request->title);
+        $slug = $slugInput;
+        $count = Service::where('slug', 'like', "{$slug}%")->where('id', '!=', $service->id)->count();
+        if ($count > 0) {
+            $slug = "{$slug}-" . ($count + 1);
+        }
+
         $service->update([
+            'slug'            => $slug,
             'title'           => $request->title,
             'subtitle'        => $request->subtitle,
             'icon'            => $request->icon,

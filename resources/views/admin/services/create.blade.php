@@ -36,6 +36,11 @@
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
                         </div>
                         <div>
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Custom URL Slug (Optional)</label>
+                            <input type="text" name="slug" value="{{ old('slug') }}" placeholder="e.g. flight-booking"
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        </div>
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Tagline Subtitle</label>
                             <input type="text" name="subtitle" value="{{ old('subtitle') }}" required placeholder="e.g. Instant ticketing and seating reservations globally"
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />

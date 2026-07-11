@@ -83,12 +83,17 @@
           <div class="col-span-1 md:col-span-3 px-5 py-3.5 hover:bg-slate-50/50 transition-colors text-left relative group">
             <label for="search-date" class="block font-sans font-bold text-[10px] uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 transition-colors mb-1 ml-0.5 pointer-events-none">Date Window</label>
             <div class="relative w-full">
+              @php
+                $currentDate = \Carbon\Carbon::now();
+                $defaultVal = $currentDate->format('Y-m');
+                $defaultLabel = $currentDate->format('F Y');
+              @endphp
               <!-- Hidden Input -->
-              <input type="hidden" id="search-date" name="date" value="july-2026" />
+              <input type="hidden" id="search-date" name="date" value="{{ $defaultVal }}" />
 
               <!-- Custom Trigger -->
               <div class="custom-select-trigger flex items-center justify-between cursor-pointer w-full text-slate-800 font-sans font-semibold text-xs sm:text-sm select-none pr-6" data-dropdown="date-dropdown">
-                <span id="date-display-val">July 2026</span>
+                <span id="date-display-val">{{ $defaultLabel }}</span>
                 <svg class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                 </svg>
@@ -96,19 +101,22 @@
 
               <!-- Custom Dropdown Menu -->
               <div id="date-dropdown" class="custom-dropdown-menu absolute top-[125%] left-0 w-max min-w-[200px] bg-white border border-slate-200/80 shadow-2xl rounded-2xl p-1.5 hidden z-50 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-200">
-                @foreach([
-                  'july-2026' => 'July 2026',
-                  'aug-2026' => 'August 2026',
-                  'sept-2026' => 'September 2026',
-                  'oct-2026' => 'October 2026',
-                  'nov-2026' => 'November 2026',
-                  'dec-2026' => 'December 2026',
-                  'later' => '2027 & Later'
-                ] as $val => $label)
-                <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="{{ $val }}">
-                  {{ $label }}
+                @for ($i = 0; $i < 6; $i++)
+                  @php
+                    $m = \Carbon\Carbon::now()->addMonths($i);
+                    $val = $m->format('Y-m');
+                    $label = $m->format('F Y');
+                  @endphp
+                  <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="{{ $val }}">
+                    {{ $label }}
+                  </div>
+                @endfor
+                @php
+                  $laterYear = \Carbon\Carbon::now()->addMonths(6)->format('Y');
+                @endphp
+                <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="later">
+                  {{ $laterYear }} & Later
                 </div>
-                @endforeach
               </div>
             </div>
           </div>

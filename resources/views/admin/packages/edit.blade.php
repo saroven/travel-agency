@@ -31,13 +31,21 @@
                     <h3 class="text-white font-display font-bold text-base tracking-tight mb-6 pb-3 border-b border-white/5">General Information</h3>
                     
                     <div class="grid grid-cols-1 gap-6">
-                        @foreach(['title','subtitle'] as $f)
                         <div>
-                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">{{ ucfirst($f) }}</label>
-                            <input type="text" name="{{ $f }}" value="{{ old($f, $package->$f) }}" required
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Title</label>
+                            <input type="text" name="title" value="{{ old('title', $package->title) }}" required
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
                         </div>
-                        @endforeach
+                        <div>
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Custom URL Slug</label>
+                            <input type="text" name="slug" value="{{ old('slug', $package->slug) }}" required
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Subtitle</label>
+                            <input type="text" name="subtitle" value="{{ old('subtitle', $package->subtitle) }}" required
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        </div>
                     </div>
 
                     <div class="mt-6">
@@ -49,32 +57,52 @@
                     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Cover Image</label>
-                            @if($package->image_path)
-                            <div class="w-full max-w-[200px] h-28 rounded-2xl overflow-hidden border border-white/5 relative mb-3">
-                                <img src="{{ asset('storage/' . $package->image_path) }}" class="w-full h-full object-cover opacity-60" />
+                            <div class="flex items-center gap-4 bg-slate-950/30 border border-white/5 p-4 rounded-2xl">
+                                @if($package->image_path)
+                                <div class="w-20 h-16 rounded-xl overflow-hidden border border-white/10 flex-shrink-0">
+                                    <img src="{{ asset('storage/' . $package->image_path) }}" class="w-full h-full object-cover" />
+                                </div>
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <input type="file" name="image" accept="image/*"
+                                        class="w-full text-slate-400 text-xs file:mr-3 file:text-xs file:bg-emerald-500/10 file:text-emerald-400 file:border file:border-emerald-500/20 file:rounded-xl file:px-3 file:py-1.5 file:font-semibold cursor-pointer" />
+                                    <span class="block text-[10px] text-slate-500 mt-1">Recommended: 1200 x 800px (JPG/PNG)</span>
+                                </div>
                             </div>
-                            @endif
-                            <input type="file" name="image" accept="image/*"
-                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-400 text-sm focus:outline-none file:mr-3 file:text-xs file:bg-emerald-500 file:text-white file:border-0 file:rounded-xl file:px-4 file:py-2 file:font-bold cursor-pointer" />
                         </div>
                         <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Add Gallery Images (Select Multiple)</label>
-                            <input type="file" name="gallery[]" accept="image/*" multiple
-                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-400 text-sm focus:outline-none file:mr-3 file:text-xs file:bg-emerald-500 file:text-white file:border-0 file:rounded-xl file:px-4 file:py-2 file:font-bold cursor-pointer" />
+                            <div class="flex items-center gap-4 bg-slate-950/30 border border-white/5 p-4 rounded-2xl h-full min-h-[82px]">
+                                <div class="flex-1 min-w-0">
+                                    <input type="file" name="gallery[]" accept="image/*" multiple
+                                        class="w-full text-slate-400 text-xs file:mr-3 file:text-xs file:bg-emerald-500/10 file:text-emerald-400 file:border file:border-emerald-500/20 file:rounded-xl file:px-3 file:py-1.5 file:font-semibold cursor-pointer" />
+                                    <span class="block text-[10px] text-slate-500 mt-1">Select multiple images to append to the gallery.</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     @if($package->images->count() > 0)
-                    <div class="mt-6">
-                        <label class="block text-slate-400 text-xs font-semibold mb-3 ml-1">Existing Gallery (Check to remove)</label>
+                    <div class="mt-8">
+                        <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-3.5 ml-1">Existing Gallery (Click image to delete)</label>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             @foreach($package->images as $img)
-                            <label class="relative group cursor-pointer border border-white/5 rounded-2xl overflow-hidden aspect-[4/3] bg-slate-950 block">
+                            <label class="relative group cursor-pointer border border-white/5 rounded-2xl overflow-hidden aspect-[4/3] bg-slate-950 block hover:border-red-500/40 transition-all duration-300">
+                                <input type="checkbox" name="remove_images[]" value="{{ $img->id }}" class="peer sr-only">
                                 <img src="{{ asset('storage/' . $img->image_path) }}" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                                <div class="absolute inset-0 bg-red-950/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-200">
-                                    <span class="text-red-400 text-[10px] font-bold uppercase tracking-wider">Remove</span>
+                                
+                                <!-- Hover Overlay (Unchecked State) -->
+                                <div class="absolute inset-0 bg-slate-950/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-200 peer-checked:hidden">
+                                    <span class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-xl shadow-lg shadow-red-500/20 flex items-center gap-1.5 transition-transform duration-200 transform translate-y-2 group-hover:translate-y-0">
+                                        🗑️ Delete
+                                    </span>
                                 </div>
-                                <input type="checkbox" name="remove_images[]" value="{{ $img->id }}" class="absolute top-2 right-2 rounded border-red-500 bg-slate-950 text-red-500 w-4 h-4 focus:ring-0 focus:ring-offset-0">
+                                
+                                <!-- Active Overlay (Checked / Marked State) -->
+                                <div class="absolute inset-0 bg-red-950/75 border-2 border-red-500/60 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 hidden peer-checked:flex">
+                                    <span class="text-white text-lg animate-bounce">🗑️</span>
+                                    <span class="text-white text-[10px] font-extrabold uppercase tracking-wider text-center px-2">Marked for Deletion</span>
+                                </div>
                             </label>
                             @endforeach
                         </div>

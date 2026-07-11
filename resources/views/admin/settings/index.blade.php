@@ -5,11 +5,7 @@
 
 @section('content')
 <div class="w-full">
-    @if(session('success'))
-    <div class="glass-panel border-emerald-500/20 bg-emerald-950/20 text-emerald-400 px-5 py-4 rounded-2xl text-xs font-semibold mb-6">
-        {{ session('success') }}
-    </div>
-    @endif
+
 
     <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data" class="space-y-8">
         @csrf
@@ -142,9 +138,13 @@
                     <div class="flex items-center gap-2">
                         <span>🔔</span> Lead Notification Channels
                     </div>
-                    <div class="flex items-center gap-3">
-                        <span class="bg-rose-500/10 text-rose-400 font-sans font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-rose-500/20">Locked</span>
+                    <div class="flex items-center gap-4">
                         <span class="bg-emerald-500/10 text-emerald-400 font-sans font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-500/20">Extra Plugin</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="webhooks_enabled" value="1" {{ ($settings['webhooks_enabled'] ?? '0') == '1' ? 'checked' : '' }} class="sr-only peer" id="webhooks-toggle">
+                            <div class="w-9 h-5 bg-slate-800 rounded-full peer peer-focus:ring-2 peer-focus:ring-emerald-500/20 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 peer-checked:after:bg-white"></div>
+                            <span class="ml-2 text-xs font-semibold text-slate-400 peer-checked:text-emerald-400 select-none" id="toggle-state-text">Disabled</span>
+                        </label>
                     </div>
                 </h3>
                 
@@ -156,30 +156,30 @@
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">New lead inquiry summaries will be mailed immediately to this address.</p>
                         </div>
-                        <div class="opacity-40 pointer-events-none select-none">
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Alert WhatsApp Phone Number</label>
-                            <input type="text" name="notification_phone" value="" placeholder="e.g. 8801712345678" disabled
+                            <input type="text" name="notification_phone" value="{{ old('notification_phone', $settings['notification_phone'] ?? '') }}" placeholder="e.g. 8801712345678"
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Your WhatsApp mobile number (include country code, e.g. 880) to receive direct WhatsApp messages.</p>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="opacity-40 pointer-events-none select-none">
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Slack Webhook URL</label>
-                            <input type="url" name="slack_webhook_url" value="" placeholder="https://hooks.slack.com/services/..." disabled
+                            <input type="url" name="slack_webhook_url" value="{{ old('slack_webhook_url', $settings['slack_webhook_url'] ?? '') }}" placeholder="https://hooks.slack.com/services/..."
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Integrate Slack channel notifications for real-time lead updates.</p>
                         </div>
-                        <div class="opacity-40 pointer-events-none select-none">
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Telegram Webhook URL</label>
-                            <input type="url" name="telegram_webhook_url" value="" placeholder="https://api.telegram.org/bot<token>/sendMessage?chat_id=<id>" disabled
+                            <input type="url" name="telegram_webhook_url" value="{{ old('telegram_webhook_url', $settings['telegram_webhook_url'] ?? '') }}" placeholder="https://api.telegram.org/bot<token>/sendMessage?chat_id=<id>"
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Send client inquiry alerts directly to a Telegram group or channel chat.</p>
                         </div>
-                        <div class="opacity-40 pointer-events-none select-none">
+                        <div>
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">WhatsApp Webhook URL</label>
-                            <input type="url" name="whatsapp_webhook_url" value="" placeholder="https://api.whatsapp-gateway.com/send" disabled
+                            <input type="url" name="whatsapp_webhook_url" value="{{ old('whatsapp_webhook_url', $settings['whatsapp_webhook_url'] ?? '') }}" placeholder="https://api.whatsapp-gateway.com/send"
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Send client inquiry alerts directly to a WhatsApp contact or group chat.</p>
                         </div>
@@ -195,4 +195,42 @@
     </form>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('webhooks-toggle');
+    const stateText = document.getElementById('toggle-state-text');
+    const container = toggle ? toggle.closest('.glass-panel') : null;
+    const inputs = container ? container.querySelectorAll('input:not(#webhooks-toggle)') : [];
+    
+    function updateInputsState() {
+        if (!toggle) return;
+        const isEnabled = toggle.checked;
+        if (stateText) {
+            stateText.textContent = isEnabled ? 'Active' : 'Disabled';
+        }
+        inputs.forEach(input => {
+            if (isEnabled) {
+                input.removeAttribute('disabled');
+                const wrapper = input.closest('div');
+                if (wrapper) {
+                    wrapper.classList.remove('opacity-40', 'pointer-events-none');
+                }
+            } else {
+                input.setAttribute('disabled', 'disabled');
+                const wrapper = input.closest('div');
+                if (wrapper) {
+                    wrapper.classList.add('opacity-40', 'pointer-events-none');
+                }
+            }
+        });
+    }
+    
+    if (toggle) {
+        toggle.addEventListener('change', updateInputsState);
+        updateInputsState();
+    }
+});
+</script>
+@endpush
 @endsection

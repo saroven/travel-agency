@@ -24,7 +24,8 @@ class FrontendController extends Controller
 
         $services = Service::where('is_active', true)->take(6)->get();
         $testimonials = Testimonial::where('is_active', true)->get();
-        return view('frontend.index', compact('packages', 'spotlights', 'services', 'testimonials'));
+        $visaRules = VisaRule::all();
+        return view('frontend.index', compact('packages', 'spotlights', 'services', 'testimonials', 'visaRules'));
     }
 
     public function packages()

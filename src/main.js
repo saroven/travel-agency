@@ -158,39 +158,146 @@ openPackageButtons.forEach(btn => {
 // ----------------------------------------------------
 const tabPackages = document.getElementById('tab-packages');
 const tabVisa = document.getElementById('tab-visa');
+const tabSlider = document.getElementById('search-tab-slider');
 const searchDestination = document.getElementById('search-destination');
 let activeSearchTab = 'packages'; // default
 
+function updateTabSlider(activeBtn) {
+  if (tabSlider && activeBtn) {
+    tabSlider.style.left = `${activeBtn.offsetLeft}px`;
+    tabSlider.style.width = `${activeBtn.offsetWidth}px`;
+  }
+}
+
 function handleTabSwitch(selectedTab) {
+  const packageItems = document.querySelectorAll('.dropdown-item-package');
+  const visaItems = document.querySelectorAll('.dropdown-item-visa');
+  const displayValSpan = document.getElementById('dest-display-val');
+
   if (selectedTab === 'packages') {
     activeSearchTab = 'packages';
-    tabPackages.className = "search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 bg-emerald-500 text-white shadow-md shadow-emerald-500/10";
-    tabVisa.className = "search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 hover:text-navy-900 hover:bg-slate-50 transition-all duration-300";
+    tabPackages.className = "search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-navy-900 z-10 select-none scale-[1.01]";
+    tabVisa.className = "search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-navy-900 transition-all duration-300 z-10 select-none";
+    updateTabSlider(tabPackages);
     
-    // Change select label or options if necessary
     const label = document.querySelector('label[for="search-destination"]');
     if (label) label.innerText = 'Destination';
+
+    // Show package items, hide visa items
+    packageItems.forEach(item => item.classList.remove('hidden'));
+    visaItems.forEach(item => item.classList.add('hidden'));
+
+    // Set default package value
+    if (packageItems.length > 0) {
+      const firstItem = packageItems[0];
+      const val = firstItem.getAttribute('data-value');
+      const text = firstItem.innerText.trim();
+      if (searchDestination) searchDestination.value = val;
+      if (displayValSpan) displayValSpan.innerText = text;
+    }
   } else {
     activeSearchTab = 'visa';
-    tabVisa.className = "search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 bg-emerald-500 text-white shadow-md shadow-emerald-500/10";
-    tabPackages.className = "search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 hover:text-navy-900 hover:bg-slate-50 transition-all duration-300";
+    tabVisa.className = "search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-navy-900 z-10 select-none scale-[1.01]";
+    tabPackages.className = "search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-navy-900 transition-all duration-300 z-10 select-none";
+    updateTabSlider(tabVisa);
     
     const label = document.querySelector('label[for="search-destination"]');
     if (label) label.innerText = 'Visa Required For';
+
+    // Hide package items, show visa items
+    packageItems.forEach(item => item.classList.add('hidden'));
+    visaItems.forEach(item => item.classList.remove('hidden'));
+
+    // Set default visa value
+    if (visaItems.length > 0) {
+      const firstItem = visaItems[0];
+      const val = firstItem.getAttribute('data-value');
+      const text = firstItem.innerText.trim();
+      if (searchDestination) searchDestination.value = val;
+      if (displayValSpan) displayValSpan.innerText = text;
+    }
   }
 }
 
 if (tabPackages && tabVisa) {
+  // Initialize slider position
+  setTimeout(() => {
+    updateTabSlider(tabPackages);
+  }, 100);
+
   tabPackages.addEventListener('click', () => handleTabSwitch('packages'));
   tabVisa.addEventListener('click', () => handleTabSwitch('visa'));
+
+  window.addEventListener('resize', () => {
+    const activeBtn = activeSearchTab === 'packages' ? tabPackages : tabVisa;
+    updateTabSlider(activeBtn);
+  });
 }
+
+// Custom Dropdown Interactivity
+const dropdownTriggers = document.querySelectorAll('.custom-select-trigger');
+const dropdownMenus = document.querySelectorAll('.custom-dropdown-menu');
+
+dropdownTriggers.forEach(trigger => {
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dropdownId = trigger.getAttribute('data-dropdown');
+    const targetMenu = document.getElementById(dropdownId);
+    
+    // Close other dropdowns
+    dropdownMenus.forEach(menu => {
+      if (menu.id !== dropdownId) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    if (targetMenu) {
+      targetMenu.classList.toggle('hidden');
+    }
+  });
+});
+
+// Close dropdowns on outside click
+document.addEventListener('click', () => {
+  dropdownMenus.forEach(menu => menu.classList.add('hidden'));
+});
+
+// Handle custom item clicks
+const dropdownItems = document.querySelectorAll('.custom-dropdown-item');
+dropdownItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const parentMenu = item.closest('.custom-dropdown-menu');
+    const val = item.getAttribute('data-value');
+    const labelText = item.innerText.trim();
+
+    if (parentMenu) {
+      // Find trigger
+      const trigger = document.querySelector(`[data-dropdown="${parentMenu.id}"]`);
+      if (trigger) {
+        // Update display span
+        const displayValSpan = trigger.firstElementChild;
+        if (displayValSpan) displayValSpan.innerText = labelText;
+      }
+
+      // Find hidden input
+      const hiddenInputId = parentMenu.id.replace('-dropdown', '');
+      const hiddenInput = document.getElementById(`search-${hiddenInputId}`);
+      if (hiddenInput) {
+        hiddenInput.value = val;
+      }
+
+      parentMenu.classList.add('hidden');
+    }
+  });
+});
 
 // Handle search form submission
 const searchWidgetForm = document.getElementById('search-widget-form');
 if (searchWidgetForm) {
   searchWidgetForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const dest = searchDestination.value;
+    const dest = document.getElementById('search-destination').value;
     const date = document.getElementById('search-date').value;
     const guests = document.getElementById('search-guests').value;
     

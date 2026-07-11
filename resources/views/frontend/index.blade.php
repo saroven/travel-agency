@@ -20,116 +20,176 @@
         Experience flawlessly tailored, 100% guided international tours for modern families, groups, and corporate enterprises. Hassle-free travel starts here.
       </p>
       
-      <!-- Smart Multi-Tab Search Widget -->
-      <div class="bg-white border border-slate-200/80 shadow-2xl rounded-3xl p-5 md:p-6 mt-4 relative z-20">
+      <!-- Smart Multi-Tab Search Widget (Redesigned with Premium UI/UX) -->
+      <div class="bg-white/95 border border-slate-100 shadow-2xl rounded-[32px] p-6 mt-4 relative z-20 hover:shadow-emerald-500/[0.02] transition-all duration-300">
         
-        <!-- Tab Selectors -->
-        <div class="flex gap-2 border-b border-slate-100 pb-4 mb-5">
-          <button id="tab-packages" class="search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 bg-emerald-500 text-white shadow-md shadow-emerald-500/10">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-            </svg>
-            <span>✈ International Packages</span>
+        <!-- Tab Selectors (Pill Slider Style) -->
+        <div class="flex p-1 bg-slate-100/70 rounded-2xl max-w-max gap-1 mb-6 border border-slate-200/20 relative" id="search-tab-track">
+          <!-- Sliding pill background -->
+          <div id="search-tab-slider" class="absolute top-1 bottom-1 left-1 bg-white shadow-sm border border-slate-200/30 rounded-xl transition-all duration-300 ease-in-out z-0"></div>
+
+          <button id="tab-packages" class="search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-navy-900 z-10 select-none scale-[1.01]">
+            <span>✈</span>
+            <span>International Packages</span>
           </button>
-          <button id="tab-visa" class="search-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 hover:text-navy-900 hover:bg-slate-50 transition-all duration-300">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-            </svg>
-            <span>🛂 Visa Support / Custom Plan</span>
+          <button id="tab-visa" class="search-tab flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-navy-900 transition-all duration-300 z-10 select-none">
+            <span>🛂</span>
+            <span>Visa & Custom Plan</span>
           </button>
         </div>
 
-        <!-- Search Fields Form -->
-        <form id="search-widget-form" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+        <!-- Search Fields Form (Airbnb-style unified search pill bar with custom premium dropdowns) -->
+        <form id="search-widget-form" class="grid grid-cols-1 md:grid-cols-12 border border-slate-200/85 rounded-2xl bg-white shadow-sm divide-y md:divide-y-0 md:divide-x divide-slate-100 hover:border-slate-350 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/10 transition-all duration-350 relative">
           
-          <!-- Destination Select (Dropdown) -->
-          <div class="col-span-1 md:col-span-4 text-left">
-            <label for="search-destination" class="block font-sans font-bold text-xs uppercase tracking-wider text-slate-400 mb-1.5 ml-1">Destination</label>
-            <div class="relative">
-              <select id="search-destination" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-sans font-medium text-slate-800 text-sm focus:outline-none focus:border-emerald-500 appearance-none cursor-pointer">
+          <!-- Destination Card Field -->
+          <div class="col-span-1 md:col-span-4 px-5 py-3.5 hover:bg-slate-50/50 transition-colors text-left relative group rounded-t-2xl md:rounded-t-none md:rounded-l-2xl">
+            <label for="search-destination" class="block font-sans font-bold text-[10px] uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 transition-colors mb-1 ml-0.5 pointer-events-none">Destination</label>
+            <div class="relative w-full">
+              <!-- Hidden Input -->
+              <input type="hidden" id="search-destination" name="destination" value="{{ $packages->first()->slug ?? 'custom' }}" />
+              
+              <!-- Custom Trigger -->
+              <div class="custom-select-trigger flex items-center justify-between cursor-pointer w-full text-slate-800 font-sans font-semibold text-xs sm:text-sm select-none pr-6" data-dropdown="dest-dropdown">
+                <span class="truncate" id="dest-display-val">{{ $packages->first()->title ?? 'Select Destination' }}</span>
+                <svg class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+
+              <!-- Custom Dropdown Menu -->
+              <div id="dest-dropdown" class="custom-dropdown-menu absolute top-[125%] left-0 w-max min-w-[260px] max-w-[320px] bg-white border border-slate-200/80 shadow-2xl rounded-2xl p-1.5 hidden z-50 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                <!-- Package Options -->
                 @foreach($packages as $p)
-                <option value="{{ $p->slug }}">{{ $p->title }}</option>
+                <div class="custom-dropdown-item dropdown-item-package w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="{{ $p->slug }}">
+                  {{ $p->title }}
+                </div>
                 @endforeach
-                <option value="custom">Other / Custom Destination</option>
-              </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
+
+                <!-- Visa Options -->
+                @foreach($visaRules as $vr)
+                <div class="custom-dropdown-item dropdown-item-visa w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer hidden" data-value="{{ $vr->country_code }}">
+                  {{ $vr->title }}
+                </div>
+                @endforeach
+                
+                <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="custom">
+                  Other / Custom Destination
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Date Window Selector -->
-          <div class="col-span-1 md:col-span-4 text-left">
-            <label for="search-date" class="block font-sans font-bold text-xs uppercase tracking-wider text-slate-400 mb-1.5 ml-1">Date Window</label>
-            <div class="relative">
-              <select id="search-date" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-sans font-medium text-slate-800 text-sm focus:outline-none focus:border-emerald-500 appearance-none cursor-pointer">
-                <option value="july-2026">July 2026</option>
-                <option value="aug-2026">August 2026</option>
-                <option value="sept-2026">September 2026</option>
-                <option value="oct-2026">October 2026</option>
-                <option value="nov-2026">November 2026</option>
-                <option value="dec-2026">December 2026</option>
-                <option value="later">2027 & Later</option>
-              </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
+          <div class="col-span-1 md:col-span-3 px-5 py-3.5 hover:bg-slate-50/50 transition-colors text-left relative group">
+            <label for="search-date" class="block font-sans font-bold text-[10px] uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 transition-colors mb-1 ml-0.5 pointer-events-none">Date Window</label>
+            <div class="relative w-full">
+              <!-- Hidden Input -->
+              <input type="hidden" id="search-date" name="date" value="july-2026" />
+
+              <!-- Custom Trigger -->
+              <div class="custom-select-trigger flex items-center justify-between cursor-pointer w-full text-slate-800 font-sans font-semibold text-xs sm:text-sm select-none pr-6" data-dropdown="date-dropdown">
+                <span id="date-display-val">July 2026</span>
+                <svg class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+              </div>
+
+              <!-- Custom Dropdown Menu -->
+              <div id="date-dropdown" class="custom-dropdown-menu absolute top-[125%] left-0 w-max min-w-[200px] bg-white border border-slate-200/80 shadow-2xl rounded-2xl p-1.5 hidden z-50 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                @foreach([
+                  'july-2026' => 'July 2026',
+                  'aug-2026' => 'August 2026',
+                  'sept-2026' => 'September 2026',
+                  'oct-2026' => 'October 2026',
+                  'nov-2026' => 'November 2026',
+                  'dec-2026' => 'December 2026',
+                  'later' => '2027 & Later'
+                ] as $val => $label)
+                <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="{{ $val }}">
+                  {{ $label }}
+                </div>
+                @endforeach
+              </div>
             </div>
           </div>
 
           <!-- Guest Count Selector -->
-          <div class="col-span-1 md:col-span-2 text-left">
-            <label for="search-guests" class="block font-sans font-bold text-xs uppercase tracking-wider text-slate-400 mb-1.5 ml-1">Guests</label>
-            <div class="relative">
-              <select id="search-guests" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-sans font-medium text-slate-800 text-sm focus:outline-none focus:border-emerald-500 appearance-none cursor-pointer">
-                <option value="1">1 Guest</option>
-                <option value="2" selected>2 Guests</option>
-                <option value="3-5">3-5 Guests</option>
-                <option value="6-10">6-10 Guests</option>
-                <option value="11+">Corporate (11+)</option>
-              </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 21c-2.243 0-4.32-.647-6.079-1.758a1 1 0 01-.408-.813V18.12c0-2.24 1.766-4.03 3.96-4.14a4.855 4.855 0 013.208.647M15 8.25a3 3 0 11-6 0 3 3 0 016 0zm6 2.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zM6 8.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-              </svg>
+          <div class="col-span-1 md:col-span-3 px-5 py-3.5 hover:bg-slate-50/50 transition-colors text-left relative group">
+            <label for="search-guests" class="block font-sans font-bold text-[10px] uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 transition-colors mb-1 ml-0.5 pointer-events-none">Guests</label>
+            <div class="relative w-full">
+              <!-- Hidden Input -->
+              <input type="hidden" id="search-guests" name="guests" value="2" />
+
+              <!-- Custom Trigger -->
+              <div class="custom-select-trigger flex items-center justify-between cursor-pointer w-full text-slate-800 font-sans font-semibold text-xs sm:text-sm select-none pr-6" data-dropdown="guests-dropdown">
+                <span id="guests-display-val">2 Guests</span>
+                <svg class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 21c-2.243 0-4.32-.647-6.079-1.758a1 1 0 01-.408-.813V18.12c0-2.24 1.766-4.03 3.96-4.14a4.855 4.855 0 013.208.647M15 8.25a3 3 0 11-6 0 3 3 0 016 0zm6 2.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zM6 8.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+              </div>
+
+              <!-- Custom Dropdown Menu -->
+              <div id="guests-dropdown" class="custom-dropdown-menu absolute top-[125%] left-0 w-max min-w-[200px] bg-white border border-slate-200/80 shadow-2xl rounded-2xl p-1.5 hidden z-50 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                @foreach([
+                  '1' => '1 Guest',
+                  '2' => '2 Guests',
+                  '3-5' => '3-5 Guests',
+                  '6-10' => '6-10 Guests',
+                  '11+' => 'Corporate (11+)'
+                ] as $val => $label)
+                <div class="custom-dropdown-item w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900 transition-all duration-200 cursor-pointer" data-value="{{ $val }}">
+                  {{ $label }}
+                </div>
+                @endforeach
+              </div>
             </div>
           </div>
 
           <!-- Find Packages CTA -->
-          <div class="col-span-1 md:col-span-2">
-            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-sans font-bold text-sm rounded-xl py-3 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 cursor-pointer">
-              Find Packages
+          <div class="col-span-1 md:col-span-2 flex items-center justify-center p-2 bg-slate-50/30 rounded-b-2xl md:rounded-b-none md:rounded-r-2xl">
+            <button type="submit" class="w-full h-full py-3.5 md:py-0 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.97] text-white font-sans font-extrabold text-xs sm:text-sm rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:shadow-emerald-500/10">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+              <span>Search</span>
             </button>
           </div>
         </form>
       </div>
-    </div>
+      </div>
     
     <!-- Right Split (40%) -->
-    <div class="lg:col-span-5 relative flex flex-col items-center gap-8 px-4">
-      <div class="absolute w-72 h-72 bg-emerald-500/10 rounded-full blur-[80px] -z-10 -top-10 -right-10"></div>
-      <div class="absolute w-72 h-72 bg-navy-900/5 rounded-full blur-[80px] -z-10 -bottom-10 -left-10"></div>
+    <div class="lg:col-span-5 relative flex flex-col items-center justify-center px-4">
+      <div class="absolute w-80 h-80 bg-emerald-500/10 rounded-full blur-[90px] -z-10 -top-10 -right-10"></div>
+      <div class="absolute w-80 h-80 bg-navy-900/5 rounded-full blur-[90px] -z-10 -bottom-10 -left-10"></div>
 
-      <!-- Overlapping Stack Parent -->
-      <div class="relative w-full max-w-[380px] aspect-[4/5]" id="spotlight-carousel">
+      <!-- Overlapping Stack Parent (Redesigned with Premium Depth Stack) -->
+      <div class="relative w-full max-w-[440px] aspect-[4/5] mt-6 lg:mt-0" id="spotlight-carousel">
+        
+        <!-- Depth Stack Backdrop Cards -->
+        <div class="absolute inset-0 bg-slate-300/30 rounded-[36px] border border-white/40 shadow-md transform -rotate-3 scale-[0.98] -translate-y-1 -z-10"></div>
+        <div class="absolute inset-0 bg-slate-200/50 rounded-[36px] border border-white/50 shadow-lg transform rotate-2 scale-[0.99] translate-y-1 -z-10"></div>
+
         @foreach($spotlights as $index => $spotlight)
         <div class="spotlight-slide absolute inset-0 transition-all duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none' }}" data-index="{{ $index }}">
-          <div class="w-full h-full rounded-[32px] overflow-hidden shadow-2xl border-4 border-white transform hover:rotate-1 transition-transform duration-500 relative">
+          <div class="w-full h-full rounded-[36px] overflow-hidden shadow-2xl border-[6px] border-white transform hover:scale-[1.02] transition-transform duration-500 relative">
             <img src="{{ asset('storage/' . $spotlight->image_path) }}" alt="{{ $spotlight->title }}" class="w-full h-full object-cover" />
             
-            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-900/90 via-navy-900/40 to-transparent p-6 text-white text-left z-10">
-              <span class="bg-gold-500 text-navy-900 font-sans font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full">
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-900/90 via-navy-900/40 to-transparent p-8 text-white text-left z-10">
+              <span class="bg-gold-500 text-navy-900 font-sans font-extrabold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full">
                 Spotlight Destination
               </span>
-              <h3 class="font-display font-bold text-lg md:text-xl mt-2.5 leading-tight hover:text-emerald-500 transition-colors">
+              <h3 class="font-display font-bold text-xl md:text-2xl mt-3.5 leading-tight hover:text-emerald-500 transition-colors">
                 <a href="{{ route('packages.show', $spotlight->slug) }}">{{ $spotlight->title }}</a>
               </h3>
-              <p class="font-sans font-medium text-xs md:text-sm text-slate-200 mt-1">Starting From ৳{{ number_format($spotlight->price) }} <span class="text-xs text-slate-300">all-inclusive</span></p>
+              <p class="font-sans font-medium text-sm text-slate-200 mt-1.5">Starting From ৳{{ number_format($spotlight->price) }} <span class="text-xs text-slate-300">all-inclusive</span></p>
             </div>
           </div>
         </div>
         @endforeach
 
-        <div class="glass-card absolute -top-4 -left-6 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-float border border-white/50 z-20">
+        <!-- Floating Badges -->
+        <div class="glass-card absolute -top-5 -left-8 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-float border border-white/50 z-20">
           <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-base">🎯</div>
           <div class="flex flex-col text-left">
             <span class="font-display font-extrabold text-navy-900 text-sm leading-none">{{ $settings['milestone_horizons'] ?? '20+' }}</span>
@@ -137,7 +197,7 @@
           </div>
         </div>
 
-        <div class="glass-card absolute bottom-12 -right-8 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-float-delayed border border-white/50 z-20">
+        <div class="glass-card absolute bottom-16 -right-10 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-float-delayed border border-white/50 z-20">
           <div class="w-8 h-8 rounded-full bg-navy-900 text-emerald-500 flex items-center justify-center text-sm">⚡</div>
           <div class="flex flex-col text-left">
             <span class="font-display font-extrabold text-navy-900 text-sm leading-none">
@@ -152,37 +212,12 @@
         </div>
 
         @if($spotlights->count() > 1)
-        <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
+        <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
           @foreach($spotlights as $index => $_)
-          <button class="carousel-dot w-2 h-2 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-emerald-500 w-4' : 'bg-slate-300 hover:bg-slate-450' }}" data-index="{{ $index }}"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-emerald-500 w-5' : 'bg-slate-300 hover:bg-slate-450' }}" data-index="{{ $index }}"></button>
           @endforeach
         </div>
         @endif
-      </div>
-
-      <!-- Quick Inquiry Card -->
-      <div class="w-full max-w-[380px] glass-card p-5 rounded-2xl shadow-xl border border-white/60 text-left hover:shadow-2xl transition-all duration-300">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="flex h-2 w-2 relative">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span class="font-sans font-bold text-xs text-navy-900 uppercase tracking-wider">Quick Inquiry</span>
-        </div>
-        <p class="font-sans font-medium text-xs text-slate-500 mb-3">Drop your name & number — our team will call you back within 30 minutes.</p>
-
-        <form id="quick-inquiry-form" class="space-y-2">
-          <input id="qi-name" type="text" placeholder="Your Full Name" required
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-sans font-medium focus:outline-none focus:border-emerald-500 transition-colors" />
-          <input id="qi-phone" type="tel" placeholder="Mobile Number (e.g. 01712...)" required
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-sans font-medium focus:outline-none focus:border-emerald-500 transition-colors" />
-          <button id="qi-submit-btn" type="submit"
-            class="w-full bg-navy-900 hover:bg-emerald-500 text-white rounded-xl px-4 py-2.5 text-xs font-bold font-sans transition-all duration-300 cursor-pointer">
-            Request Callback
-          </button>
-        </form>
-        <p id="qi-success" class="hidden text-emerald-600 font-sans font-bold text-xs text-center mt-2">✓ Received! We'll call you shortly.</p>
-        <p id="qi-error" class="hidden text-red-500 font-sans font-semibold text-xs text-center mt-2">Something went wrong. Please try again.</p>
       </div>
     </div>
   </div>

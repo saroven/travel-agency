@@ -8,6 +8,16 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+/vendor
+.env
+.env.backup
+.env.production
+/public/hot
+/public/storage
+/storage/*.key
+.phpunit.result.cache
+docker-compose.override.yml
+
 dist
 dist-ssr
 *.local

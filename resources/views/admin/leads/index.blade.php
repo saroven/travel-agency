@@ -24,7 +24,7 @@
 
         <select name="type" class="bg-slate-950/60 border border-white/10 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 cursor-pointer">
             <option value="" class="bg-slate-900">All Channels</option>
-            @foreach(['consultation','contact','service_inquiry','package_booking'] as $t)
+            @foreach(['consultation','contact','service_inquiry','package_booking','quick_inquiry'] as $t)
             <option value="{{ $t }}" {{ request('type') == $t ? 'selected' : '' }} class="bg-slate-900">{{ ucwords(str_replace('_',' ',$t)) }}</option>
             @endforeach
         </select>

@@ -160,23 +160,29 @@
         @endif
       </div>
 
-      <!-- AI Hybrid Consultation Prompt -->
-      <div class="w-full max-w-[380px] glass-card p-4 rounded-2xl shadow-xl border border-white/60 text-left hover:shadow-2xl transition-all duration-300">
-        <div class="flex items-center gap-2 mb-2">
+      <!-- Quick Inquiry Card -->
+      <div class="w-full max-w-[380px] glass-card p-5 rounded-2xl shadow-xl border border-white/60 text-left hover:shadow-2xl transition-all duration-300">
+        <div class="flex items-center gap-2 mb-3">
           <span class="flex h-2 w-2 relative">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span class="font-sans font-bold text-xs text-navy-900 uppercase tracking-wider">AI Travel Consultant</span>
+          <span class="font-sans font-bold text-xs text-navy-900 uppercase tracking-wider">Quick Inquiry</span>
         </div>
-        <p class="font-sans font-medium text-xs text-slate-600 mb-2.5">Tell me your dream vacation and budget, and I'll outline an itinerary instantly.</p>
-        
-        <div class="flex gap-2">
-          <input id="ai-quick-input" type="text" placeholder="e.g. 5 days in Dubai with family under 2 Lakh..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-sans font-medium focus:outline-none focus:border-emerald-500" />
-          <button id="ai-quick-btn" class="bg-navy-900 hover:bg-emerald-500 text-white rounded-xl px-4 py-2 text-xs font-bold font-sans transition-all duration-300 cursor-pointer">
-            Plan
+        <p class="font-sans font-medium text-xs text-slate-500 mb-3">Drop your name & number — our team will call you back within 30 minutes.</p>
+
+        <form id="quick-inquiry-form" class="space-y-2">
+          <input id="qi-name" type="text" placeholder="Your Full Name" required
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-sans font-medium focus:outline-none focus:border-emerald-500 transition-colors" />
+          <input id="qi-phone" type="tel" placeholder="Mobile Number (e.g. 01712...)" required
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-sans font-medium focus:outline-none focus:border-emerald-500 transition-colors" />
+          <button id="qi-submit-btn" type="submit"
+            class="w-full bg-navy-900 hover:bg-emerald-500 text-white rounded-xl px-4 py-2.5 text-xs font-bold font-sans transition-all duration-300 cursor-pointer">
+            Request Callback
           </button>
-        </div>
+        </form>
+        <p id="qi-success" class="hidden text-emerald-600 font-sans font-bold text-xs text-center mt-2">✓ Received! We'll call you shortly.</p>
+        <p id="qi-error" class="hidden text-red-500 font-sans font-semibold text-xs text-center mt-2">Something went wrong. Please try again.</p>
       </div>
     </div>
   </div>
@@ -457,10 +463,12 @@
             <textarea id="contact-plan" placeholder="Tell us about special requests, guest configurations, or custom destination details..." rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 font-sans text-sm focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-colors resize-none"></textarea>
           </div>
 
-          <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-sans font-bold text-sm rounded-xl py-3.5 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer">
+          <button id="footer-form-btn" type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-sans font-bold text-sm rounded-xl py-3.5 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer">
             Submit Design Request
           </button>
         </form>
+        <div id="footer-form-success" class="hidden mt-4 p-4 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-400 font-sans font-semibold text-sm text-center">✓ Request received! Our planner will reach out within 24 hours.</div>
+        <div id="footer-form-error" class="hidden mt-4 p-4 bg-red-500/20 border border-red-500/40 rounded-xl text-red-400 font-sans font-semibold text-sm text-center">Something went wrong. Please try again.</div>
       </div>
 
     </div>
@@ -516,6 +524,82 @@
             showSlide(nextIdx);
           }, 5500);
         });
+      });
+    }
+
+    // Footer Contact Form — Plan Your Custom Trip
+    const footerForm = document.getElementById('footer-contact-form');
+    if (footerForm) {
+      footerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('footer-form-btn');
+        const successEl = document.getElementById('footer-form-success');
+        const errorEl   = document.getElementById('footer-form-error');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        successEl.classList.add('hidden');
+        errorEl.classList.add('hidden');
+        try {
+          const res = await fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              type:         'consultation',
+              name:         document.getElementById('contact-name').value.trim(),
+              phone:        document.getElementById('contact-phone').value.trim(),
+              destination:  document.getElementById('contact-destination').value.trim(),
+              plan_details: (document.getElementById('contact-plan').value.trim() +
+                            (document.getElementById('contact-date').value.trim() ? '\nEstimated Date: ' + document.getElementById('contact-date').value.trim() : '')).trim(),
+              source_page:  window.location.href,
+            })
+          });
+          if (res.ok) {
+            footerForm.classList.add('hidden');
+            successEl.classList.remove('hidden');
+          } else {
+            throw new Error('failed');
+          }
+        } catch {
+          errorEl.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'Submit Design Request';
+        }
+      });
+    }
+
+    // Quick Inquiry Form
+    const qiForm = document.getElementById('quick-inquiry-form');
+    if (qiForm) {
+      qiForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('qi-name').value.trim();
+        const phone = document.getElementById('qi-phone').value.trim();
+        const btn = document.getElementById('qi-submit-btn');
+        const success = document.getElementById('qi-success');
+        const error = document.getElementById('qi-error');
+
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        success.classList.add('hidden');
+        error.classList.add('hidden');
+
+        try {
+          const res = await fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ name, phone, type: 'quick_inquiry', source_page: window.location.href })
+          });
+          if (res.ok) {
+            qiForm.classList.add('hidden');
+            success.classList.remove('hidden');
+          } else {
+            throw new Error('failed');
+          }
+        } catch {
+          error.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'Request Callback';
+        }
       });
     }
   });

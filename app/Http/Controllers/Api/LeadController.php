@@ -11,7 +11,7 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'type'        => 'required|in:consultation,contact,service_inquiry,package_booking',
+            'type'        => 'required|in:consultation,contact,service_inquiry,package_booking,quick_inquiry',
             'name'        => 'required|string|max:150',
             'phone'       => 'required|string|max:30',
             'email'       => 'nullable|email|max:150',
@@ -20,7 +20,7 @@ class LeadController extends Controller
             'budget'      => 'nullable|string|max:100',
             'plan_details'=> 'nullable|string|max:2000',
             'service_slug'=> 'nullable|string|max:50',
-            'source_page' => 'nullable|string|max:100',
+            'source_page' => 'nullable|string|max:500',
             'extra_data'  => 'nullable|array',
         ]);
 

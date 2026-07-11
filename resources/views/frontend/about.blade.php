@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
-@section('title', 'About Our Travel Agency | Airbridge Tours & Travel Bangladesh')
-@section('meta_description', 'Learn about the values, milestones, and guided travel frameworks behind Airbridge Tours & Travel, the leading premium agency in Bangladesh.')
+@section('title', 'About Our Travel Agency | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' Bangladesh')
+@section('meta_description', 'Learn about the values, milestones, and guided travel frameworks behind ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ', the leading premium agency in Bangladesh.')
 
 @section('content')
 <!-- Hero Header Section -->
@@ -15,7 +15,7 @@
         {!! $settings['about_heading'] ?? 'We Build The <span class="text-emerald-500">Bridge</span> to the World' !!}
       </h1>
       <p class="text-slate-600 font-sans text-base md:text-lg leading-relaxed max-w-xl">
-        {{ $settings['about_description'] ?? 'Airbridge Tours & Travel was established with a singular mission: to eliminate the headaches, hidden costs, and operational stresses associated with international holiday planning from Bangladesh. We believe that global exploration should be flawless, guided, and premium.' }}
+        {{ $settings['about_description'] ?? (($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' was established with a singular mission: to eliminate the headaches, hidden costs, and operational stresses associated with international holiday planning from Bangladesh. We believe that global exploration should be flawless, guided, and premium.') }}
       </p>
     </div>
 

@@ -64,7 +64,7 @@ const modalPhone = document.getElementById('modal-phone');
 const modalDestination = document.getElementById('modal-destination');
 
 // Open Consultation Modal
-function showConsultationModal(prefillDest = '') {
+function showConsultationModal(prefillDest = '', type = 'consultation') {
   if (consultationModal) {
     consultationModal.classList.remove('hidden');
     // Micro-delay to trigger CSS transitions
@@ -76,6 +76,11 @@ function showConsultationModal(prefillDest = '') {
 
     if (modalDestination) {
       modalDestination.value = prefillDest;
+    }
+
+    const modalType = document.getElementById('modal-type');
+    if (modalType) {
+      modalType.value = type;
     }
   }
 }
@@ -149,7 +154,7 @@ const openPackageButtons = document.querySelectorAll('.open-package-modal');
 openPackageButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     const destinationName = btn.getAttribute('data-destination') || '';
-    showConsultationModal(destinationName);
+    showConsultationModal(destinationName, 'package_booking');
   });
 });
 
@@ -302,7 +307,7 @@ if (searchWidgetForm) {
     const guests = document.getElementById('search-guests').value;
     
     const prefillMessage = `${activeSearchTab === 'packages' ? 'Package Request' : 'Visa Assistance'} | Destination: ${dest.toUpperCase()} | Date: ${date} | Guests: ${guests}`;
-    showConsultationModal(prefillMessage);
+    showConsultationModal(prefillMessage, activeSearchTab === 'packages' ? 'package_booking' : 'consultation');
   });
 }
 
@@ -414,6 +419,7 @@ if (modalConsultationForm) {
     const name = document.getElementById('modal-name').value;
     const phone = document.getElementById('modal-phone').value;
     const dest = document.getElementById('modal-destination').value;
+    const typeVal = document.getElementById('modal-type')?.value || 'consultation';
     
     const submitBtn = modalConsultationForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
@@ -425,7 +431,7 @@ if (modalConsultationForm) {
         'Accept': 'application/json',
       },
       body: JSON.stringify({
-        type: 'consultation',
+        type: typeVal,
         name: name,
         phone: phone,
         destination: dest,

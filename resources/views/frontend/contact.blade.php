@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
-@section('title', 'Contact Our Office | Airbridge Tours & Travel Bangladesh')
-@section('meta_description', 'Get in touch with the travel designers at Airbridge. Visit our Gulshan 1 office in Dhaka, or request direct hotline flight/visa support.')
+@section('title', 'Contact Our Office | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' Bangladesh')
+@section('meta_description', 'Get in touch with the travel designers at ' . ($settings['site_name'] ?? 'Airbridge') . '. Visit our Gulshan 1 office in Dhaka, or request direct hotline flight/visa support.')
 
 @section('content')
 <!-- Hero Header Section -->

@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', 'Visa Processing Services | Airbridge Tours & Travel Bangladesh')
+@section('title', 'Visa Processing Services | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' Bangladesh')
 @section('meta_description', 'Expert documentation checklist and tourist/business visa processing support from Bangladesh for Dubai, Thailand, Singapore, and Malaysia.')
 
 @section('content')

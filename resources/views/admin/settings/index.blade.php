@@ -138,30 +138,50 @@
 
             {{-- Lead Notification Channels (Spans full width on LG screens) --}}
             <div class="glass-panel rounded-[32px] p-6 md:p-8 lg:col-span-2">
-                <h3 class="text-white font-display font-bold text-base tracking-tight mb-6 pb-3 border-b border-white/5 flex items-center gap-2">
-                    <span>🔔</span> Lead Notification Channels
+                <h3 class="text-white font-display font-bold text-base tracking-tight mb-6 pb-3 border-b border-white/5 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span>🔔</span> Lead Notification Channels
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="bg-rose-500/10 text-rose-400 font-sans font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-rose-500/20">Locked</span>
+                        <span class="bg-emerald-500/10 text-emerald-400 font-sans font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-500/20">Extra Plugin</span>
+                    </div>
                 </h3>
                 
                 <div class="grid grid-cols-1 gap-6">
-                    <div>
-                        <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Alert Email Address</label>
-                        <input type="email" name="notification_email" value="{{ old('notification_email', $settings['notification_email'] ?? '') }}" placeholder="alerts@airbridgebd.com"
-                            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
-                        <p class="text-[10px] text-slate-500 mt-2 font-medium">New lead inquiry summaries will be mailed immediately to this address.</p>
-                    </div>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Alert Email Address</label>
+                            <input type="email" name="notification_email" value="{{ old('notification_email', $settings['notification_email'] ?? '') }}" placeholder="alerts@airbridgebd.com"
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
+                            <p class="text-[10px] text-slate-500 mt-2 font-medium">New lead inquiry summaries will be mailed immediately to this address.</p>
+                        </div>
+                        <div class="opacity-40 pointer-events-none select-none">
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Alert WhatsApp Phone Number</label>
+                            <input type="text" name="notification_phone" value="" placeholder="e.g. 8801712345678" disabled
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
+                            <p class="text-[10px] text-slate-500 mt-2 font-medium">Your WhatsApp mobile number (include country code, e.g. 880) to receive direct WhatsApp messages.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="opacity-40 pointer-events-none select-none">
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Slack Webhook URL</label>
-                            <input type="url" name="slack_webhook_url" value="{{ old('slack_webhook_url', $settings['slack_webhook_url'] ?? '') }}" placeholder="https://hooks.slack.com/services/..."
+                            <input type="url" name="slack_webhook_url" value="" placeholder="https://hooks.slack.com/services/..." disabled
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Integrate Slack channel notifications for real-time lead updates.</p>
                         </div>
-                        <div>
+                        <div class="opacity-40 pointer-events-none select-none">
                             <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">Telegram Webhook URL</label>
-                            <input type="url" name="telegram_webhook_url" value="{{ old('telegram_webhook_url', $settings['telegram_webhook_url'] ?? '') }}" placeholder="https://api.telegram.org/bot<token>/sendMessage?chat_id=<id>"
+                            <input type="url" name="telegram_webhook_url" value="" placeholder="https://api.telegram.org/bot<token>/sendMessage?chat_id=<id>" disabled
                                 class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
                             <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Send client inquiry alerts directly to a Telegram group or channel chat.</p>
+                        </div>
+                        <div class="opacity-40 pointer-events-none select-none">
+                            <label class="block text-slate-400 text-xs font-semibold mb-2 ml-1">WhatsApp Webhook URL</label>
+                            <input type="url" name="whatsapp_webhook_url" value="" placeholder="https://api.whatsapp-gateway.com/send" disabled
+                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-all" />
+                            <p class="text-[10px] text-slate-500 mt-2 font-medium">Optional. Send client inquiry alerts directly to a WhatsApp contact or group chat.</p>
                         </div>
                     </div>
                 </div>
@@ -174,4 +194,5 @@
         </button>
     </form>
 </div>
+
 @endsection

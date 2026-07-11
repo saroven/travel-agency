@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', 'Airbridge Tours & Travel | Redefining International Travel from Bangladesh')
+@section('title', ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' | Redefining International Travel from Bangladesh')
 
 @section('content')
 <!-- Component B: The Hero Workspace ("The Bridge to the World") -->
@@ -340,7 +340,7 @@
         Our Milestones Stand Tall
       </h2>
       <p class="text-slate-600 font-sans text-sm sm:text-base leading-relaxed mb-8">
-        Airbridge Tours & Travel bridges dreams to destination with unmatched operational rigor, offering complete transparency at every step of your travel planning.
+        {{ $settings['site_name'] ?? 'Airbridge' }} {{ $settings['site_tagline'] ?? 'Tours & Travel' }} bridges dreams to destination with unmatched operational rigor, offering complete transparency at every step of your travel planning.
       </p>
       
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-4 border-t border-slate-200 pt-8">

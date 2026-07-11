@@ -6,6 +6,7 @@
 @section('content')
 {{-- Stats Telemetry Panel --}}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    {{-- Card 1: Total Leads --}}
     <div class="glass-panel glass-panel-glow rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
         <div class="flex items-center justify-between mb-4">
             <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Leads</span>
@@ -17,6 +18,7 @@
         </div>
     </div>
     
+    {{-- Card 2: New Leads --}}
     <div class="glass-panel border-emerald-500/20 rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300" style="box-shadow: 0 0 30px -10px rgba(16, 185, 129, 0.12);">
         <div class="flex items-center justify-between mb-4">
             <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">New Leads</span>
@@ -29,6 +31,7 @@
         </div>
     </div>
 
+    {{-- Card 3: Inquiries Today --}}
     <div class="glass-panel rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
         <div class="flex items-center justify-between mb-4">
             <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Inquiries Today</span>
@@ -40,6 +43,19 @@
         </div>
     </div>
 
+    {{-- Card 4: Conversion Rate --}}
+    <div class="glass-panel border-indigo-500/20 rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300" style="box-shadow: 0 0 30px -10px rgba(99, 102, 241, 0.12);">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Lead Conversion</span>
+            <span class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-sm">🎯</span>
+        </div>
+        <p class="text-indigo-400 font-display font-bold text-3xl tracking-tight">{{ $stats['conversion_rate'] }}%</p>
+        <div class="flex items-center gap-1.5 mt-2 text-[10px] font-semibold text-indigo-400/80">
+            <span>Processed vs. total leads</span>
+        </div>
+    </div>
+
+    {{-- Card 5: Active Packages --}}
     <div class="glass-panel rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
         <div class="flex items-center justify-between mb-4">
             <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Active Packages</span>
@@ -48,6 +64,43 @@
         <p class="text-white font-display font-bold text-3xl tracking-tight">{{ $stats['active_packages'] }}</p>
         <div class="flex items-center gap-1.5 mt-2 text-[10px] font-semibold text-slate-500">
             <span>Tours live on showcase</span>
+        </div>
+    </div>
+
+    {{-- Card 6: Active Services --}}
+    <div class="glass-panel rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Active Services</span>
+            <span class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-sm">⚙</span>
+        </div>
+        <p class="text-white font-display font-bold text-3xl tracking-tight">{{ $stats['total_services'] }}</p>
+        <div class="flex items-center gap-1.5 mt-2 text-[10px] font-semibold text-slate-500">
+            <span>Bespoke travel solutions</span>
+        </div>
+    </div>
+
+    {{-- Card 7: Visa Country Rules --}}
+    <div class="glass-panel rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Visa Rules</span>
+            <span class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-sm">🗺️</span>
+        </div>
+        <p class="text-white font-display font-bold text-3xl tracking-tight">{{ $stats['total_visa_rules'] }}</p>
+        <div class="flex items-center gap-1.5 mt-2 text-[10px] font-semibold text-slate-500">
+            <span>Supported country policies</span>
+        </div>
+    </div>
+
+    {{-- Card 8: Telemetry Status --}}
+    <div class="glass-panel rounded-3xl p-6 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Telemetry</span>
+            <span class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-sm">🟢</span>
+        </div>
+        <p class="text-emerald-400 font-display font-bold text-3xl tracking-tight">Active</p>
+        <div class="flex items-center gap-1.5 mt-2 text-[10px] font-semibold text-emerald-400/80">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping"></span>
+            <span>Server serving client requests</span>
         </div>
     </div>
 </div>

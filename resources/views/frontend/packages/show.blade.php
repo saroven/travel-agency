@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', $package->title . ' Itinerary Details | Airbridge Tours & Travel')
+@section('title', $package->title . ' Itinerary Details | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel'))
 @section('meta_description', $package->subtitle . ' — View day-by-day itineraries, flight logistics, handpicked hotel stays, and verified inclusion checklists.')
 
 @section('content')

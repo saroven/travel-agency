@@ -29,14 +29,21 @@ class SettingController extends Controller
             'milestone_concierge',
             'milestone_care',
             'notification_email',
+            'notification_phone',
             'slack_webhook_url',
             'telegram_webhook_url',
+            'whatsapp_webhook_url',
+            'webhooks_enabled',
             'site_name',
             'site_tagline',
         ];
 
         foreach ($keys as $key) {
-            Setting::setValue($key, $request->input($key));
+            if ($key === 'webhooks_enabled') {
+                Setting::setValue($key, $request->has('webhooks_enabled') ? '1' : '0');
+            } else {
+                Setting::setValue($key, $request->input($key));
+            }
         }
 
         // Handle Site Logo upload

@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', 'Bespoke Travel Services | Airbridge Tours & Travel Bangladesh')
+@section('title', 'Bespoke Travel Services | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' Bangladesh')
 @section('meta_description', 'Explore our end-to-end travel services including direct flight ticketing, luxury hotel bookings, custom tour itineraries, private transits, and group tour management.')
 
 @section('content')
@@ -13,7 +13,7 @@
       Everything You Need for a <span class="text-emerald-500">Perfect Trip</span>
     </h1>
     <p class="text-slate-600 font-sans text-base md:text-lg leading-relaxed">
-      From direct ticketing integrations to custom day-by-day itineraries and private chauffeurs, explore the operational capabilities that back every Airbridge voyage.
+      From direct ticketing integrations to custom day-by-day itineraries and private chauffeurs, explore the operational capabilities that back every {{ $settings['site_name'] ?? 'Airbridge' }} voyage.
     </p>
   </div>
 </section>

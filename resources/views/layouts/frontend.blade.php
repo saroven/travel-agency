@@ -200,6 +200,7 @@
         <p class="font-sans text-slate-500 text-sm mb-6">Our senior travel architects will call you within 15 minutes to configure your premium tour itinerary.</p>
         
         <form id="modal-consultation-form" class="flex flex-col gap-4">
+          <input type="hidden" id="modal-type" name="type" value="consultation" />
           <div>
             <label for="modal-name" class="block font-sans font-bold text-[10px] uppercase tracking-wider text-slate-400 mb-1">Your Full Name</label>
             <input id="modal-name" type="text" placeholder="Full Name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-sans text-sm focus:outline-none focus:border-emerald-500" />
@@ -233,7 +234,7 @@
         
         <h3 class="font-display font-bold text-2xl text-slate-900 mb-2">Request Logged Successfully!</h3>
         <p class="font-sans text-slate-500 text-sm mb-6 leading-relaxed">
-          Thank you for choosing Airbridge Tours & Travel. A senior travel architect is compiling your parameters and will connect via phone within 15 minutes.
+          Thank you for choosing {{ $settings['site_name'] ?? 'Airbridge' }} {{ $settings['site_tagline'] ?? 'Tours & Travel' }}. A senior travel architect is compiling your parameters and will connect via phone within 15 minutes.
         </p>
         
         <button id="success-close-btn" class="w-full bg-navy-900 hover:bg-emerald-500 text-white font-sans font-bold text-sm rounded-xl py-3 transition-colors duration-300 cursor-pointer">

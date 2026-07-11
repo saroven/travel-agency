@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
-@section('title', 'Curated Tour Packages | Airbridge Tours & Travel Bangladesh')
-@section('meta_description', 'Browse and search through Airbridge\'s elite, 100% guided international tour packages including Dubai, Thailand, Singapore, Bali, Maldives, and Malaysia.')
+@section('title', 'Curated Tour Packages | ' . ($settings['site_name'] ?? 'Airbridge') . ' ' . ($settings['site_tagline'] ?? 'Tours & Travel') . ' Bangladesh')
+@section('meta_description', 'Browse and search through ' . ($settings['site_name'] ?? 'Airbridge') . '\'s elite, 100% guided international tour packages including Dubai, Thailand, Singapore, Bali, Maldives, and Malaysia.')
 
 @section('content')
 <!-- Hero Header Section -->

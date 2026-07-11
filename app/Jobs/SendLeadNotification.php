@@ -52,6 +52,13 @@ class SendLeadNotification implements ShouldQueue
             }
         }
 
+        // Check if Webhook Integration Plugins are enabled globally
+        $webhooksEnabled = Setting::getValue('webhooks_enabled') === '1';
+        if (!$webhooksEnabled) {
+            Log::info("Lead notification Webhook Plugins are disabled. Skipping Slack, Telegram, and WhatsApp alerts.");
+            return;
+        }
+
         // 2. Slack Webhook
         $slackUrl = Setting::getValue('slack_webhook_url');
         if ($slackUrl) {
@@ -89,6 +96,38 @@ class SendLeadNotification implements ShouldQueue
                 Log::info("Lead Telegram notification sent for Lead ID: {$lead->id}");
             } catch (\Exception $e) {
                 Log::error("Lead Telegram notification failed: " . $e->getMessage());
+            }
+        }
+
+        // 4. WhatsApp Webhook
+        $whatsappUrl = Setting::getValue('whatsapp_webhook_url');
+        if ($whatsappUrl) {
+            try {
+                $msg = "🔔 *New Lead Submission on Airbridge!*\n\n" .
+                       "*Name:* {$lead->name}\n" .
+                       "*Phone:* {$lead->phone}\n" .
+                       "*Email:* " . ($lead->email ?? 'N/A') . "\n" .
+                       "*Channel:* " . ucwords(str_replace('_', ' ', $lead->type)) . "\n" .
+                       "*Destination:* " . ($lead->destination ?? 'N/A') . "\n" .
+                       "*Details:* {$lead->plan_details}\n" .
+                       "*Dashboard URL:* " . url('/admin/leads/' . $lead->id);
+
+                $payload = [
+                    'text' => $msg,
+                    'message' => $msg,
+                    'body' => $msg, // UltraMsg expects 'body'
+                ];
+
+                // Append alert target phone number if configured in settings
+                $notificationPhone = Setting::getValue('notification_phone');
+                if ($notificationPhone) {
+                    $payload['to'] = $notificationPhone;
+                }
+
+                Http::post($whatsappUrl, $payload);
+                Log::info("Lead WhatsApp notification sent for Lead ID: {$lead->id}");
+            } catch (\Exception $e) {
+                Log::error("Lead WhatsApp notification failed: " . $e->getMessage());
             }
         }
     }

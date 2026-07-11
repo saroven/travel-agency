@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', $service->title . ' | Bespoke Service Details | Airbridge')
+@section('title', $service->title . ' | Bespoke Service Details | ' . ($settings['site_name'] ?? 'Airbridge'))
 @section('meta_description', $service->subtitle . ' — Learn about our operational workflow, milestones, benefits, and direct booking inquiries.')
 
 @section('content')
@@ -228,7 +228,7 @@
             'Accept': 'application/json',
           },
           body: JSON.stringify({
-            type: 'service',
+            type: 'service_inquiry',
             name: name,
             phone: phone,
             destination: serviceTitle,

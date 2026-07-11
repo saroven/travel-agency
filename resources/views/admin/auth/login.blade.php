@@ -8,54 +8,45 @@
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;850&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
         .login-card {
-            background: #090d16;
-            border: 1px solid #1e293b;
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 
-                        0 0 50px -10px rgba(16, 185, 129, 0.08);
+            background: rgba(9, 13, 22, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6), 
+                        0 0 50px -10px rgba(16, 185, 129, 0.05);
         }
         
         .glow-orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(140px);
-            opacity: 0.12;
+            opacity: 0.1;
             z-index: 0;
             pointer-events: none;
         }
 
         .premium-input {
-            background: #030712;
-            border: 1px solid #1e293b;
-            transition: all 0.2s ease;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.25s ease;
         }
 
         .premium-input:focus {
             border-color: #10b981;
-            box-shadow: 0 0 14px -2px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.2);
             outline: none;
+            background: rgba(3, 7, 18, 0.85);
         }
     </style>
 </head>
-<body class="h-full bg-[#030712] font-sans flex items-center justify-center p-4 relative overflow-hidden text-slate-300">
+<body class="h-full bg-[#030712] font-sans flex items-center justify-center p-4 relative overflow-hidden text-slate-350 select-none">
 
     <!-- Ambient Glowing Orbs -->
     <div class="glow-orb w-[500px] h-[500px] bg-emerald-500 -top-20 -left-20"></div>
@@ -111,10 +102,6 @@
                 </button>
             </form>
         </div>
-
-        <p class="text-center text-slate-500 text-[11px] font-medium tracking-wide mt-6">
-            Default Admin: admin@airbridge.com · Password: password
-        </p>
     </div>
 
 </body>

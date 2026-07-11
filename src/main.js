@@ -781,6 +781,12 @@ function calculateVisaRequirements(e) {
 
 if (visaCalcForm) {
   visaCalcForm.addEventListener('submit', calculateVisaRequirements);
+  if (visaCountrySelect) {
+    visaCountrySelect.addEventListener('change', () => calculateVisaRequirements());
+  }
+  if (visaOccupationSelect) {
+    visaOccupationSelect.addEventListener('change', () => calculateVisaRequirements());
+  }
   calculateVisaRequirements();
 }
 

@@ -47,6 +47,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // Profile Management
+    Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.index');
+    Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
 
 use App\Http\Controllers\FrontendController;

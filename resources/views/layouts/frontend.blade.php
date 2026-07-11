@@ -25,22 +25,30 @@
   <body class="bg-canvas-bg text-slate-700 font-sans selection:bg-emerald-500 selection:text-white">
 
     <!-- Site Preloader Overlay -->
-    <div id="preloader" style="position: fixed; inset: 0; background: linear-gradient(135deg, #091E3A 0%, #06152a 100%); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div id="preloader" style="position: fixed; inset: 0; background: radial-gradient(circle at center, #091e3a 0%, #040d1a 100%); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
       <div class="flex flex-col items-center">
-        @if(!empty($settings['site_logo']))
-          <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="h-16 w-auto object-contain mb-4 animate-pulse" alt="Logo" />
-        @else
-          <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center relative overflow-hidden border border-white/10 animate-bounce">
-            <span class="text-white font-display font-extrabold text-2xl z-10 leading-none">A</span>
-            <svg class="absolute w-12 h-12 text-emerald-500 transform rotate-45 -translate-y-0.5 -translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
+        
+        <!-- Glowing Orbit Spinner Container -->
+        <div class="relative w-24 h-24 mb-6">
+          <div class="loader-orbit-outer">
+            <div class="loader-orbit-inner"></div>
           </div>
-        @endif
+          <div class="loader-logo-center">
+            @if(!empty($settings['site_logo']))
+              <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="h-8 w-auto object-contain" alt="Logo" />
+            @else
+              <!-- Styled compass icon inside the center of the orbital rings -->
+              <svg class="w-6 h-6 text-emerald-500 transform rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            @endif
+          </div>
+        </div>
+
         <div class="preloader-progress-bar">
           <div class="preloader-progress-fill"></div>
         </div>
-        <span class="text-white/40 font-sans text-[10px] uppercase tracking-widest mt-4 font-semibold">Configuring Horizons...</span>
+        <span class="text-emerald-400/60 font-sans text-[10px] uppercase tracking-widest mt-4 font-bold animate-pulse-slow">Configuring Horizons...</span>
       </div>
     </div>
 

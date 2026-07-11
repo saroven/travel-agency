@@ -10,6 +10,13 @@ const getBaseUrl = () => {
   return './';
 };
 
+const getApiUrl = (path) => {
+  const host = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:8000' 
+    : window.location.origin;
+  return `${host}${path}`;
+};
+
 // ----------------------------------------------------
 // 1. Mobile Menu Toggle
 // ----------------------------------------------------
@@ -301,14 +308,38 @@ if (modalConsultationForm) {
     const phone = document.getElementById('modal-phone').value;
     const dest = document.getElementById('modal-destination').value;
     
-    console.log(`[LEAD RECEIVED]: Modal Consultation Form`, { name, phone, dest });
-    
-    modalConsultationForm.reset();
-    hideConsultationModal();
-    
-    setTimeout(() => {
-      showSuccessModal();
-    }, 400);
+    const submitBtn = modalConsultationForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch(getApiUrl('/api/leads'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'consultation',
+        name: name,
+        phone: phone,
+        destination: dest,
+        source_page: window.location.pathname,
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      modalConsultationForm.reset();
+      hideConsultationModal();
+      setTimeout(() => {
+        showSuccessModal();
+      }, 400);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Something went wrong. Please try again.');
+    })
+    .finally(() => {
+      if (submitBtn) submitBtn.disabled = false;
+    });
   });
 }
 
@@ -322,13 +353,39 @@ if (footerContactForm) {
     const date = document.getElementById('contact-date').value;
     const plan = document.getElementById('contact-plan').value;
 
-    console.log(`[LEAD RECEIVED]: Footer Lead Form`, { name, phone, dest, date, plan });
+    const submitBtn = footerContactForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
 
-    footerContactForm.reset();
-    
-    setTimeout(() => {
-      showSuccessModal();
-    }, 100);
+    fetch(getApiUrl('/api/leads'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'contact',
+        name: name,
+        phone: phone,
+        destination: dest,
+        travel_date: date || null,
+        plan_details: plan,
+        source_page: window.location.pathname,
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      footerContactForm.reset();
+      setTimeout(() => {
+        showSuccessModal();
+      }, 100);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Something went wrong. Please try again.');
+    })
+    .finally(() => {
+      if (submitBtn) submitBtn.disabled = false;
+    });
   });
 }
 
@@ -568,43 +625,51 @@ function calculateVisaRequirements(e) {
   
   const country = visaCountrySelect.value;
   const occupation = visaOccupationSelect.value;
-  const countryInfo = visaData[country];
-  
-  if (!countryInfo) return;
   
   if (visaOutputPlaceholder) visaOutputPlaceholder.classList.add('hidden');
   if (visaOutputContent) visaOutputContent.classList.remove('hidden');
   
-  if (visaOutCountryTitle) visaOutCountryTitle.innerText = countryInfo.title;
-  if (visaOutOccupSub) visaOutOccupSub.innerText = `${occupation.toUpperCase()} Documentation Checklist`;
-  if (visaOutPrice) visaOutPrice.innerText = countryInfo.price;
-  if (visaOutTime) visaOutTime.innerText = countryInfo.time;
-  
-  if (visaDocsList) {
-    visaDocsList.innerHTML = '';
-    const docs = countryInfo.docs[occupation] || [];
-    docs.forEach(doc => {
-      const li = document.createElement('li');
-      li.className = 'flex items-start gap-3';
-      li.innerHTML = `
-        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs mt-0.5 flex-shrink-0">✓</span>
-        <span>${doc}</span>
-      `;
-      visaDocsList.appendChild(li);
-    });
-  }
-
-  if (visaCtaBtn) {
-    const newBtn = visaCtaBtn.cloneNode(true);
-    visaCtaBtn.parentNode.replaceChild(newBtn, visaCtaBtn);
+  fetch(getApiUrl(`/api/visa/${country}/${occupation}`), {
+    headers: {
+      'Accept': 'application/json',
+    }
+  })
+  .then(res => res.json())
+  .then(countryInfo => {
+    if (visaOutCountryTitle) visaOutCountryTitle.innerText = countryInfo.title;
+    if (visaOutOccupSub) visaOutOccupSub.innerText = `${occupation.toUpperCase()} Documentation Checklist`;
+    if (visaOutPrice) visaOutPrice.innerText = countryInfo.price;
+    if (visaOutTime) visaOutTime.innerText = countryInfo.processing_time;
     
-    newBtn.addEventListener('click', () => {
-      const countryName = visaCountrySelect.options[visaCountrySelect.selectedIndex].text;
-      const occupName = visaOccupationSelect.options[visaOccupationSelect.selectedIndex].text;
-      const prefillMessage = `Visa Request: ${countryName} (${occupName}) | Price: ${countryInfo.price}`;
-      showConsultationModal(prefillMessage);
-    });
-  }
+    if (visaDocsList) {
+      visaDocsList.innerHTML = '';
+      const docs = countryInfo.requirements || [];
+      docs.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start gap-3';
+        li.innerHTML = `
+          <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs mt-0.5 flex-shrink-0">✓</span>
+          <span>${doc}</span>
+        `;
+        visaDocsList.appendChild(li);
+      });
+    }
+
+    if (visaCtaBtn) {
+      const newBtn = visaCtaBtn.cloneNode(true);
+      visaCtaBtn.parentNode.replaceChild(newBtn, visaCtaBtn);
+      
+      newBtn.addEventListener('click', () => {
+        const countryName = visaCountrySelect.options[visaCountrySelect.selectedIndex].text;
+        const occupName = visaOccupationSelect.options[visaOccupationSelect.selectedIndex].text;
+        const prefillMessage = `Visa Request: ${countryName} (${occupName}) | Price: ${countryInfo.price}`;
+        showConsultationModal(prefillMessage);
+      });
+    }
+  })
+  .catch(err => {
+    console.error(err);
+  });
 }
 
 if (visaCalcForm) {
@@ -626,10 +691,38 @@ if (contactPageForm) {
     const budget = document.getElementById('c-budget').value;
     const plan = document.getElementById('c-plan').value;
 
-    console.log(`[LEAD RECEIVED]: Contact Page Form`, { name, phone, email, dest, budget, plan });
-    
-    contactPageForm.reset();
-    showSuccessModal();
+    const submitBtn = contactPageForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch(getApiUrl('/api/leads'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'contact',
+        name: name,
+        phone: phone,
+        email: email,
+        destination: dest,
+        budget: budget,
+        plan_details: plan,
+        source_page: window.location.pathname,
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      contactPageForm.reset();
+      showSuccessModal();
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Something went wrong. Please try again.');
+    })
+    .finally(() => {
+      if (submitBtn) submitBtn.disabled = false;
+    });
   });
 }
 
@@ -1234,14 +1327,47 @@ if (srvMainContent && srvErrorContent) {
         const clientPhone = document.getElementById('srv-phone').value;
         const comments = document.getElementById('srv-comments').value;
         
-        console.log(`[SERVICE INQUIRY LOGGED]: ${details.title}`, {
-          clientName,
-          clientPhone,
-          comments
+        // Gather extra dynamic fields
+        const extraData = {};
+        const dynamicFields = document.querySelectorAll('#srv-dynamic-fields input, #srv-dynamic-fields select, #srv-dynamic-fields textarea');
+        dynamicFields.forEach(el => {
+          if (el.id) {
+            const key = el.id.replace('srv-', '');
+            extraData[key] = el.value;
+          }
         });
-        
-        form.reset();
-        showSuccessModal();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch(getApiUrl('/api/leads'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'service_inquiry',
+            name: clientName,
+            phone: clientPhone,
+            plan_details: comments,
+            service_slug: srvId,
+            extra_data: extraData,
+            source_page: window.location.pathname,
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          form.reset();
+          showSuccessModal();
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Something went wrong. Please try again.');
+        })
+        .finally(() => {
+          if (submitBtn) submitBtn.disabled = false;
+        });
       });
     }
     

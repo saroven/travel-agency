@@ -1,24 +1,16 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
-import { resolve } from 'path'
+import laravel from 'laravel-vite-plugin'
 
 export default defineConfig({
-  base: '/travel-agency/',
   plugins: [
     tailwindcss(),
+    laravel({
+      input: [
+        'resources/css/app.css',
+        'resources/js/app.js',
+      ],
+      refresh: true,
+    }),
   ],
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(process.cwd(), 'index.html'),
-        packages: resolve(process.cwd(), 'packages.html'),
-        services: resolve(process.cwd(), 'services.html'),
-        visa: resolve(process.cwd(), 'visa.html'),
-        about: resolve(process.cwd(), 'about.html'),
-        contact: resolve(process.cwd(), 'contact.html'),
-        destination: resolve(process.cwd(), 'destination-details.html'),
-        service_details: resolve(process.cwd(), 'service-details.html'),
-      }
-    }
-  }
 })

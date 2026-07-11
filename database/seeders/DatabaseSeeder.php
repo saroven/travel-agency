@@ -15,12 +15,20 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ── Admin User ──────────────────────────────────────────────
+        // ── Admin Users ─────────────────────────────────────────────
         User::firstOrCreate(
             ['email' => 'admin@airbridge.com'],
             [
                 'name'     => 'Airbridge Admin',
                 'password' => Hash::make('password'),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'shahalam.roven28@gmail.com'],
+            [
+                'name'     => 'Shah Alam',
+                'password' => Hash::make('825028'),
             ]
         );
 
@@ -38,7 +46,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 240,
                 'overview'      => 'From the height of Burj Khalifa to the depths of desert safaris, experience the best of Dubai with luxury hotel stays and VIP transportation.',
-                'image_path'    => 'packages/dubai_safari.png',
+                'image_path'    => 'packages/dubai_safari.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Dubai (pre-allocated seating)',
                     '4 Nights accommodation in 5-star luxury hotel',
@@ -71,7 +79,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 190,
                 'overview'      => 'Ditch the rush. Relax with island hopping in Phuket, explore Bangkok\'s historic temples, and indulge in pristine beachfront resorts.',
-                'image_path'    => 'packages/thailand_phuket.png',
+                'image_path'    => 'packages/thailand_phuket.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Bangkok & Bangkok to Phuket',
                     '3 Nights in Phuket beachfront resort + 2 Nights in Bangkok central hotel',
@@ -104,7 +112,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 310,
                 'overview'      => 'Immerse your family in Sentosa Island adventures, explore the futuristic supertrees at Gardens by the Bay, and tour Universal Studios.',
-                'image_path'    => 'packages/singapore_modern.png',
+                'image_path'    => 'packages/singapore_modern.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Singapore (seat priority)',
                     '4 Nights stay in highly connected 4-star hotels',
@@ -136,7 +144,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 150,
                 'overview'      => 'Connect with nature, beaches, and historic Hindu temples in Ubud and Nusa Dua with private guides.',
-                'image_path'    => 'packages/bali_beach.png',
+                'image_path'    => 'packages/bali_beach.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Denpasar (Bali)',
                     '4 Nights in luxury 4-star Nusa Dua beach resort',
@@ -168,7 +176,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 110,
                 'overview'      => 'Immerse yourself in pure luxury at an overwater bungalow with an all-inclusive meal plan.',
-                'image_path'    => 'packages/maldives_luxury.png',
+                'image_path'    => 'packages/maldives_luxury.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Male',
                     '3 Nights stay in luxury Overwater Bungalow',
@@ -199,7 +207,7 @@ class DatabaseSeeder extends Seeder
                 'stars'         => 5,
                 'reviews_count' => 180,
                 'overview'      => 'See the Petronas Twin Towers, Genting Highlands, and escape to Langkawi beach resorts.',
-                'image_path'    => 'packages/malaysia_towers.png',
+                'image_path'    => 'packages/malaysia_towers.webp',
                 'inclusions'    => [
                     'Return flights from Dhaka to Kuala Lumpur & domestic flight to Langkawi',
                     '2 Nights in Kuala Lumpur + 2 Nights in Langkawi beachfront resort',
